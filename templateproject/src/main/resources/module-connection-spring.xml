@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans  xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:jee="http://www.springframework.org/schema/jee"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop"	
+	xsi:schemaLocation=
+		"http://www.springframework.org/schema/jee http://www.springframework.org/schema/jee/spring-jee-3.1.xsd
+		http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-3.0.xsd
+		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.1.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.1.xsd">	
+		
+    <!-- 
+    <Resource name="jdbc/FiesDS" auth="Container" type="javax.sql.DataSource"
+	      maxActive="100" maxIdle="30" maxWait="100"
+              username="postgres" password="root" driverClassName="org.postgresql.Driver"
+              url="jdbc:postgresql://192.168.10.12:5432/fies"/>
+              
+    <Resource name="jdbc/FiesDS" auth="Container" type="javax.sql.DataSource"
+	maxActive="100" maxIdle="30" maxWait="100"
+ username="root" password="" driverClassName="com.mysql.jdbc.Driver"
+ url="jdbc:mysql:///fies"/>          
+     -->
+		
+	 
+	 <!--  session factory do tabularium  -->	 
+	 <bean id="sessionFactory"
+		class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+		<property name="dataSource" ref="fies-ds" />		
+		<property name="hibernateProperties">
+			<props>
+				<!-- <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop> -->
+				<prop key="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</prop>
+				<prop key="hibernate.format_sql">true</prop>
+				<prop key="hibernate.show_sql">true</prop>
+				<prop key="hibernate.transaction.flush_before_completion">true</prop>
+				<prop key="hibernate.transaction.auto_close_session">true</prop>				
+				<prop key="hibernate.connection.release_mode">auto</prop>		
+			</props>
+		</property>
+		
+		<property name="annotatedClasses">
+			<array>
+				<value>br.com.mec.fies.domain.Aditamento</value>
+				<value>br.com.mec.fies.domain.DadoCadastral</value>
+				<value>br.com.mec.fies.domain.Fiador</value>
+				<value>br.com.mec.fies.domain.HistoricoAditamento</value>
+				<value>br.com.mec.fies.domain.Ies</value>
+				<value>br.com.mec.fies.domain.TermoFinanciamento</value>
+				<value>br.com.mec.fies.domain.Usuario</value>
+				<value>br.com.mec.fies.domain.ValidaAditamento</value>
+				<value>br.com.mec.fies.domain.Escola</value>
+				<value>br.com.mec.fies.domain.Obra</value>
+			</array>
+		</property>
+	</bean>	
+	
+	
+	<tx:advice transaction-manager="transactionManager" id="txAdvice">
+		<tx:attributes>
+			<tx:method name="*"/>
+		</tx:attributes>
+	</tx:advice>
+	
+	
+	<!-- CONFIGURAR
+
+	    <aop:config>
+		    <aop:advisor advice-ref="txAdvice" pointcut="execution(* br.com.mec.fies.dao.*DAO.*(..))"/>
+	    </aop:config>	
+	-->
+
+
+	<bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+		<property name="sessionFactory" ref="sessionFactory"/>
+	</bean>
+	
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+	
+	
+	<!-- <context:annotation-config />  -->
+	<context:component-scan base-package="br.com.mec.fies.dao" />
+	<context:component-scan base-package="br.com.mec.fies.facade" />
+	<context:component-scan base-package="br.com.mec.fies.service" />
+	<context:component-scan base-package="br.com.mec.fies.controle" />
+	<context:component-scan base-package="br.com.mec.fies.core.db" />
+	<context:component-scan base-package="br.com.mec.fies.security" />
+	
+	<aop:aspectj-autoproxy/>
+	
+</beans>

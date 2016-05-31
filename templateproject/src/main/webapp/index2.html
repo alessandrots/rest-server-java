@@ -1,0 +1,1106 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+        <meta http-equiv="content-type" content="text/html;charset=utf-8" />
+		<title>New Project - Controle suas Tarefas</title>
+
+        <!-- CSS -->
+		<link rel="stylesheet" href="css/demo-new.css">
+		<link rel="stylesheet" href="css/flowchartDemo.css">
+        <link rel="stylesheet" href="css/core.css">
+        <link rel="stylesheet" href="css/ui-lightness/jquery-ui-1.9.2.custom.min.css"  />
+        <link rel="stylesheet" href="css/jstree/syntax/!style.css"/>
+        <link rel="stylesheet" href="css/jstree/!style.css"/>
+
+        <!-- JQuery-->
+        <script type="text/javascript" src="js/jquery/jquery-1.8.3.js"></script>
+        <script type="text/javascript" src="js/jquery/modernizr.custom.59241.js"></script>
+        <script type="text/javascript" src="js/jquery/jquery-ui-1.9.2.custom.min.js"></script>
+        <script type="text/javascript" src="js/jquery/jquery.ui.touch-punch.min.js"></script>
+        <script type="text/javascript" src="js/jquery/jquery.selectboxes.js"></script>
+        <script type="text/javascript" src="js/jquery/jstree/jquery.cookie.js"></script>
+        <script type="text/javascript" src="js/jquery/jstree/jquery.hotkeys.js"></script>
+        <script type="text/javascript" src="js/jquery/jstree/jquery.jstree.js"></script>
+        <script type="text/javascript" src="css/jstree/syntax/!script.js"></script> <!-- TODO -->
+
+        <!-- BEZIER-->
+        <script type="text/javascript" src="js/jsplumb/lib/jsBezier-0.5.js"></script>
+
+        <!-- DEP -->
+        <!-- jsplumb util -->
+        <script type="text/javascript" src="js/jsplumb/1.4.0/jsPlumb-util-1.4.0-RC1.js"></script>
+        <!-- base DOM adapter -->
+        <script type="text/javascript" src="js/jsplumb/1.4.0/jsPlumb-dom-adapter-1.4.0-RC1.js"></script>
+        <!-- main jsplumb engine -->
+        <script type="text/javascript" src="js/jsplumb/1.4.0/jsPlumb-1.4.0-RC1.js"></script>
+        <!-- connectors, endpoint and overlays  -->
+        <script type="text/javascript" src="js/jsplumb/1.4.0/jsPlumb-defaults-1.4.0-RC1.js"></script>
+        <!-- state machine connectors -->
+        <script type="text/javascript" src="js/jsplumb/1.4.0/jsPlumb-connectors-statemachine-1.4.0-RC1.js"></script>
+        <!-- flowchart connectors -->
+        <script type="text/javascript" src="js/jsplumb/1.4.0/jsPlumb-connectors-flowchart-1.4.0-RC1.js"></script>
+        <!-- SVG renderer -->
+        <script type="text/javascript" src="js/jsplumb/1.4.0/jsPlumb-renderers-svg-1.4.0-RC1.js"></script>
+        <!-- jquery jsPlumb adapter -->
+        <script type="text/javascript" src="js/jsplumb/1.4.0/jquery.jsPlumb-1.4.0-RC1.js"></script>
+
+        <!-- code owner -->
+        <!-- <script type="text/javascript" src="js/jshera/flowchartConnectorsDemo.js"></script> -->
+        <script type="text/javascript" src="js/jshera/flowchartConnectors.js"></script>
+        <script type="text/javascript" src="js/jshera/core.js"></script>
+        <script type="text/javascript" src="js/jshera/util.js"></script>
+
+        <script type="text/javascript" src="js/backbone/underscore.js"></script>
+        <script type="text/javascript" src="js/backbone/mustache.js"></script>
+        <script type="text/javascript" src="js/backbone/backbone.js"></script>
+        <script type="text/javascript" src="js/negocio/modelo/TarefaModel.js"></script>
+        <script type="text/javascript" src="js/negocio/visao/TarefaView.js"></script>
+        <script type="text/javascript" src="js/negocio/colecao/TarefaCollectionView.js"></script>
+        <script type="text/javascript" src="js/negocio/colecao/TarefaList.js"></script>
+        <script type="text/javascript" src="js/negocio/util/router.js"></script>
+        <script type="text/javascript" src="js/negocio/modelo/LoginModel.js"></script>
+        <script type="text/javascript" src="js/negocio/visao/LoginView.js"></script>
+        
+        <!-- 
+        /**
+ * o path era teste (anteriormente)
+ * http://coenraets.org/blog/2011/12/restful-services-with-jquery-and-java-using-jax-rs-and-jersey/
+ * http://www.mkyong.com/webservices/jax-rs/integrate-jackson-with-resteasy/
+ * http://www.mkyong.com/webservices/jax-rs/restfull-java-client-with-java-net-url/
+ * 
+ * http://stackoverflow.com/questions/9332276/cannot-create-jdbc-driver-of-class-for-connect-url-null-tomcat-sql-serv
+ * http://tomcat.apache.org/tomcat-6.0-doc/config/context.html#Defining_a_context
+ * 
+ * http://localhost/phpmyadmin/tbl_sql.php?db=fies&table=termofinanciamento&server=1&target=&token=0c2c90f712f77f31e56845d8a6f2eadf#PMAURL-2:db_structure.php?db=fies&table=&server=1&target=&token=0c2c90f712f77f31e56845d8a6f2eadf
+ * 
+ * http://localhost:8080/mecfies/ns/rest/fies/aditamento/parte/get?nuCpf=51964149754
+ * http://localhost:8080/mecfies/ns/rest/fies/ies/parte/get?coAditamento=1
+ * http://localhost:8080/mecfies/ns/rest/fies/termo/parte/get?coAditamento=1
+ * http://localhost:8080/mecfies/ns/rest/fies/aditamento/disponivel/get?nuCpf=51964149754
+ * 
+ */
+         -->
+
+<script type="text/javascript">
+//<![CDATA[
+
+    //TODO - botar num arquivo javascript - quebrar em partes
+	$(document).ready(function() {
+
+        var opcoesAcordeao = {
+            fillSpace: true,
+            autoHeight: false,
+            collapsible: true
+        };
+        $('.acordeao').accordion(opcoesAcordeao);
+        $('.acordeao').accordion("activate", -1);
+
+        /* */
+        //criando as abas
+        var opcoesAbas = {
+            select: function(event, ui) {
+                $('.msg-fly').remove();
+                var mensagem ='';
+                mensagem += ' Aba selecionada foi a ' +(parseInt(ui.index) + 1) +'a.,' +
+                        ' denominada: '+ ui.tab.firstChild.nodeValue;
+                $('<p />', {
+                    class: 'msg-fly',
+                    text: mensagem
+                }).insertBefore($('#inspector')).hide().fadeIn(2000);
+            }
+        };
+
+        $('#inspector').tabs(opcoesAbas);
+
+        //COMPONENTES BACKBONE
+        var appRouter = new AppRouter();
+        //appRouter.start();
+
+
+        //jstree
+        $("#arvoreTarefas")
+                .jstree({ "plugins" : ["themes","html_data","ui"] })
+                .bind("loaded.jstree", function (event, data) {
+                    // 1) the loaded event fires as soon as data is parsed and inserted
+                })
+                .one("reopen.jstree", function (event, data) {
+                    // 2) but if you are using the cookie plugin or the core `initially_open` option:
+                })
+                .one("reselect.jstree", function (event, data) {
+                    // 3) but if you are using the cookie plugin or the UI `initially_select` option:
+                });
+
+
+        //Limpando a ultima tarefa selecionada
+        $('#tarefaSelecionada').val('');
+
+        //desmarcando o checkbox
+        $("#cbxCloneTarget").attr("checked",false);
+
+		//Mostrando e exibindo a janela
+		$('#minimizar').click(function(){
+		     if ($(this).text() ==  'Esconder'){
+                //esconde o cadastro e redimensiona a div do jsPlumb
+                $('#cadastro').hide('fast');
+                $('#containerPlumb').css({width:'100%'});
+                $(this).text('Exibir')
+		     } else {
+			    //exibe o cadastro e redimensiona a div do jsPlumb
+                $('#containerPlumb').css({width:'69%'});
+		        $('#cadastro').show('fast');
+			    $(this).text('Esconder')
+                 $('.acordeao').accordion("activate", -1);
+             }
+		});
+                
+        var contaJanela = 0;
+
+        var tarefaView = new TarefaView();
+        tarefaView.render();
+
+		//Criar Tarefa
+		$('#criarTarefa').click(function(){
+		       contaJanela = retornarProximoID(contaJanela);
+               var nomeTarefa = 'window_' + contaJanela;
+		       //alert(nomeTarefa);
+	           $('<div class="window" id="' + nomeTarefa + '"><strong>' + contaJanela + '</strong></div>').prependTo('#render');
+		       
+
+		       //pegando as coordenadas e mostrando na div de mensagem
+		       $('#' + nomeTarefa).mouseover(function(){
+                    //TODO parou de funcionar depois que cria uma nova tarefa
+			        var posicao = $('#' + nomeTarefa).offset();
+
+                    $('#mensagem').show('slow', function(){
+                       $(this).css('background', 'yellow').text(
+                               'left : ' + posicao.left
+                               + ' top : ' + posicao.top
+                               + ' width : ' + $('#' + nomeTarefa).width()
+                               + ' height : ' + $('#' + nomeTarefa).height() );
+                    });
+
+		       });
+
+
+               //Clique na tarefa para adicionar o nome no input - OK tá funcionando
+//               $('#' + nomeTarefa).click(function(){
+//                   $('#id_window_tarefa').val(nomeTarefa);
+//
+//                   myModel = new TarefaModel();
+//                   myModel.urlRoot = 'project/cadTarefas/recuperarTarefaPorWinTarefa';
+//
+//                   //Aqui busca os dados filtrado pelo param idWinTarefa com o valor window_1002,
+//                   //é retornado o formato JSON e chamo o stringify para ver os dados num formato legível
+//                   //por fim faço um parse do JSON para poder recuperar os valores nos atributos
+//                   myModel.fetch({data: {idWinTarefa: nomeTarefa}}).done(function () {
+//                       //console.log('myModel = ', myModel.toJSON());
+//                       //console.log(JSON.stringify(myModel.toJSON(), '', '  '));
+//                       var contact = JSON.parse(JSON.stringify(myModel.toJSON(), '', '  '));
+//
+//                       if (contact != undefined) {
+//                           console.log('codigo = ',        contact.codigo);
+//                           console.log('nome = ',          contact.nome);
+//                           console.log('duracao = ',       contact.duracao);
+//                           console.log('dataInicio = ',    contact.dataInicio);
+//                           console.log('dataEntrega = ',   contact.dataEntrega);
+//                           console.log('dataTermino = ',   contact.dataTermino);
+//                           console.log('idWinTarefa = ',   contact.idWinTarefa);
+//                       } else {
+//                           console.log('Nenhum resultado foi encontrado com a pesquisa feita.');
+//                       }
+//                   });
+//               });
+
+                $('#' + nomeTarefa).click(function(){
+                    $('#id_window_tarefa').val(nomeTarefa);
+
+                    appRouter.findByWinTarefa2(nomeTarefa);//OK
+                });
+
+			
+		     //Criando a tarefa
+		     jsPlumbDemo.criarTarefa(nomeTarefa);
+		});//end criarTarefa
+
+        //Botão Conectar
+		$('#conectar').click(function(){
+		    //
+		});
+
+        //Botão Imprimir Hierarquia das Tarefas
+        $('#imprimir').click(function(){
+            jsPlumbDemo.imprimir(1);
+        });
+
+        //Imprimir das Tarefas ja guardadas
+        $('#imprimir2').click(function(){
+            jsPlumbDemo.imprimir(2);
+        });
+
+        //Exibir hierarquia
+        $('#exibirHierarquia').click(function(){
+            jsPlumbDemo.exibirHierarquia();
+        });
+
+        //Organizar hierarquia
+        $('#organizarHierarquia').click(function(){
+            jsPlumbDemo.reposicionarObjetos();
+        });
+
+        //Botão Clonar Tarefa
+        $('#clonarTarefa').click(function(){
+            //Verificando se uma tarefa foi selecionada
+            if ($('#tarefaSelecionada').val() != '') {
+                contaJanela = retornarProximoID(contaJanela);
+
+                var nomeTarefaNova = 'window_' + contaJanela;
+                console.log('nomeTarefaNova = ' + nomeTarefaNova);
+
+                $('<div class="window" id="' + nomeTarefaNova + '"><strong>' + contaJanela + '</strong></div>').prependTo('#render');
+
+                $('#' + nomeTarefaNova).offset(function(index, coord) {
+                    return {top: 300, left: 250};
+                });
+
+                //Clonando a tarefa
+                jsPlumbDemo.clonarTarefa($('#tarefaSelecionada').val(), nomeTarefaNova);
+
+            } else {
+                $('#mensagem').show('fast', function(){
+                    $(this).css({background:'red', borderColor:'blue'}).text('Clique numa tarefa para clonar a mesma.');
+                });
+
+                $('#mensagem').delay(2000);
+
+                $('#mensagem').hide('fast', function(){
+                    $(this).text('');
+                });
+            }
+        });//fim clonarTarefa
+
+
+        $('#sltOrigem').change(function(){
+            if($(this).selectedTexts() != 'SELECIONE'){
+                $('#tarefaSelecionada').val($(this).val());
+
+                //Voltando a informação inicial
+                $('#sltDestino').val('SELECIONE');
+
+                //forçando desmarcar o checkbox
+                $("#cbxCloneTarget").attr("checked",false);
+                console.log('tarefa origem selecionada = ' + $(this).val());
+            }
+        });
+
+        $('#sltDestino').change(function(){
+            if($(this).selectedTexts() != 'SELECIONE'){
+                $('#tarefaSelecionada').val($(this).val());
+
+                //Voltando a informação inicial
+                $('#sltOrigem').val('SELECIONE');
+
+                //marcando o checkbox de destino
+                $("#cbxCloneTarget").attr("checked",true);
+                console.log('tarefa destino selecionada = ' + $(this).val());
+            }
+        });
+
+
+        //Botão Clonar Tarefa
+        $('#copiarConexoes').click(function(){
+            //alert("O checkbox esta checado? " + $("#cbxCloneTarget").is(":checked"));
+            jsPlumbDemo.carregarConexoes('window_1001', 'window_1002');//TODO
+
+        });//fim clonarTarefa
+
+
+        //Botão Clonar Tarefa - IMPORTANTE
+        $('#showAllConn').click(function() {
+            radioConn  = $('input[name=cbxConnection]:checked').val();
+            tarefaConn = $('#nomeTarefaDiv').val();
+
+            //console.log('escolha do radio = ', radioConn);
+            //console.log('escolha do nome da tarefa = ', tarefaConn);
+
+            if ( radioConn != 2 && (tarefaConn == null || tarefaConn == undefined  || tarefaConn == '')) {
+                console.log(' Informe nome da tarefa obrigatoriamente para pesquisar source ou target ');
+            } else if ( radioConn != 2){
+                jsPlumbDemo.showAllConexoes(radioConn, tarefaConn);
+            } else {
+                jsPlumbDemo.showAllConexoes(radioConn, null);
+            }
+
+            //jsPlumbDemo.showAllConexoes();
+        });
+
+
+        $('#showConnPai').click(function() {
+           var tarefasPai =  jsPlumbDemo.descobrirTarefaPai();
+
+            for (var j = 0; j < tarefasPai.length; j++) {
+                console.log('tarefa PAI = ', tarefasPai[j]);
+            }
+        });
+
+
+        //sincronizacao
+        $('#sincronizacao').click(function() {
+            var tarefasPai =  jsPlumbDemo.descobrirTarefaPai();
+
+            jsPlumbDemo.proverSincronizacao(tarefasPai);
+        });
+
+
+        //TODO comentado temporariamente
+        //Backbone.emulateHTTP = true;
+        //Backbone.emulateJSON = true;
+
+        $('#getTarefa').click(function(){
+            //OK - traz o dado filtrado
+            //appRouter.findByWinTarefa('window_1002');
+
+            myModel = new TarefaModel();
+            myModel.urlRoot = 'project/cadTarefas/recuperarTarefaPorWinTarefa';
+
+            //Aqui busca os dados filtrado pelo param idWinTarefa com o valor window_1002,
+            //é retornado o formato JSON e chamo o stringify para ver os dados num formato legível
+            //por fim faço um parse do JSON para poder recuperar os valores nos atributos
+            myModel.fetch({data: {idWinTarefa: 'window_1002'}}).done(function () {
+                //console.log('myModel = ', myModel.toJSON());
+                //console.log(JSON.stringify(myModel.toJSON(), '', '  '));
+                var contact = JSON.parse(JSON.stringify(myModel.toJSON(), '', '  '));
+
+                if (contact !== undefined) {
+                    console.log('codigo = ',        contact.codigo);
+                    console.log('nome = ',          contact.nome);
+                    console.log('duracao = ',       contact.duracao);
+                    console.log('dataInicio = ',    contact.dataInicio);
+                    console.log('dataEntrega = ',   contact.dataEntrega);
+                    console.log('dataTermino = ',   contact.dataTermino);
+                    console.log('idWinTarefa = ',   contact.idWinTarefa);
+                } else {
+                    console.log('recuperarTarefaPorWinTarefa --> Nenhum resultado foi encontrado com a pesquisa feita.');
+                }
+            });
+
+        });//end of #getTarefas
+
+
+        $('#getTarefas').click(function(){
+            //OK - traz o dado filtrado
+            //appRouter.findByWinTarefa('window_1002');
+
+            myModel = new TarefaModel();
+            myModel.urlRoot = 'project/cadTarefas/recuperarTodos';
+
+            //Aqui busca os dados filtrado pelo param idWinTarefa com o valor window_1002,
+            //é retornado o formato JSON e chamo o stringify para ver os dados num formato legível
+            //por fim faço um parse do JSON para poder recuperar os valores nos atributos
+            myModel.fetch().done(function () {
+                //console.log('myModel = ', myModel.toJSON());
+                console.log(JSON.stringify(myModel.toJSON(), '', '  '));
+                var contact = JSON.parse(JSON.stringify(myModel.toJSON(), '', '  '));
+
+                if (contact !==  undefined && contact[0] !== undefined) {
+                    console.log('codigo = ',        contact[0].codigo);
+                    console.log('nome = ',          contact[0].nome);
+                    console.log('duracao = ',       contact[0].duracao);
+                    console.log('dataInicio = ',    contact[0].dataInicio);
+                    console.log('dataEntrega = ',   contact[0].dataEntrega);
+                    console.log('dataTermino = ',   contact[0].dataTermino);
+                    console.log('idWinTarefa = ',   contact[0].idWinTarefa);
+                } else {
+                    console.log('recuperarTodos --> Nenhum resultado foi encontrado com a pesquisa feita.');
+                }
+            });
+
+        });//end of #getTarefas
+
+
+        $('#getTarefas2').click(function(){
+            //OK - traz o dado filtrado
+            //appRouter.findByWinTarefa('window_1002');
+
+            myModel = new TarefaModel();
+            myModel.urlRoot = 'project/cadTarefas/recuperarTarefaPorWinTarefa';
+
+            var search_params = {
+                'key1': 'value1',
+                'idWinTarefa': 'window_1001%2Cwindow_1002',
+                'key2': 'value2',
+                'key3': 'value3',
+                'keyN': 'valueN'
+             };
+
+            //Aqui busca os dados filtrado por VÁRIOS PARÂMETROS,
+            //No server(java) vai gerar o seguinte JSON:
+            //{"key3":"value3","key2":"value2","key1":"value1","idWinTarefa":"window_1001%2Cwindow_1002","keyN":"valueN"}
+            //http://stackoverflow.com/questions/12315973/fetch-backbone-collection-with-search-parameters
+            myModel.fetch({data: $.param(search_params)}).done(function () {
+                //console.log('myModel = ', myModel.toJSON());
+                console.log(JSON.stringify(myModel.toJSON(), '', '  '));
+                var contact = JSON.parse(JSON.stringify(myModel.toJSON(), '', '  '));
+                //TODO fazer um foreach
+
+                if (contact !== undefined && contact[0] !== undefined) {
+                    console.log('codigo = ',        contact[0].codigo);
+                    console.log('nome = ',          contact[0].nome);
+                    console.log('duracao = ',       contact[0].duracao);
+                    console.log('dataInicio = ',    contact[0].dataInicio);
+                    console.log('dataEntrega = ',   contact[0].dataEntrega);
+                    console.log('dataTermino = ',   contact[0].dataTermino);
+                    console.log('idWinTarefa = ',   contact[0].idWinTarefa);
+                } else {
+                    console.log('recuperarTarefaPorWinTarefa --> Nenhum resultado foi encontrado com a pesquisa feita.');
+                }
+
+            });
+
+        });//end of #getTarefas2
+
+        $('#getTarefas3').click(function(){
+            //OK - traz o dado filtrado
+            //appRouter.findByWinTarefa('window_1002');
+
+            myModel = new TarefaModel();
+            myModel.urlRoot = 'project/cadTarefas/recuperarPorQualquerParteDoNome';
+
+            var search_params = {
+                'nome': 'teste'
+            };
+
+            //Aqui busca os dados filtrado por VÁRIOS PARÂMETROS,
+            //No server(java) vai gerar o seguinte JSON:
+            //{"key3":"value3","key2":"value2","key1":"value1","idWinTarefa":"window_1001%2Cwindow_1002","keyN":"valueN"}
+            //http://stackoverflow.com/questions/12315973/fetch-backbone-collection-with-search-parameters
+            myModel.fetch({data: $.param(search_params)}).done(function () {
+                //console.log('myModel = ', myModel.toJSON());
+                console.log(JSON.stringify(myModel.toJSON(), '', '  '));
+                var contact = JSON.parse(JSON.stringify(myModel.toJSON(), '', '  '));
+
+                if (contact !== undefined && contact[0] !== undefined) {
+                    console.log('codigo = ',        contact[0].codigo);
+                    console.log('nome = ',          contact[0].nome);
+                    console.log('duracao = ',       contact[0].duracao);
+                    console.log('dataInicio = ',    contact[0].dataInicio);
+                    console.log('dataEntrega = ',   contact[0].dataEntrega);
+                    console.log('dataTermino = ',   contact[0].dataTermino);
+                    console.log('idWinTarefa = ',   contact[0].idWinTarefa);
+                } else {
+                    console.log('recuperarTarefaPorWinTarefa --> Nenhum resultado foi encontrado com a pesquisa feita.');
+                }
+
+            });
+
+        });//end of #getTarefas2
+
+
+        $('#btnCadastro').click(function() {
+            console.log('aquiiii.....');
+//            tarefaView.savePost(event);
+            //link interessante: http://chilipepperdesign.com/2013/01/15/backbone-js-bind-callback-to-successful-model-fetch/
+
+            if ($('#id_codigo').val != undefined && $('#id_codigo').val() != '') {
+                tarefaView.atualizarCadastro(event);
+            } else {
+                tarefaView.savePost(event);
+            }
+        });
+        
+        
+      	//Botão Clonar Tarefa
+        $('#btnRest1').click(function(){
+        	console.log('loadContent btn1');
+            var url_ = "/fies/ns/rest/tarefa/listarResumidosSobResponsabilidadeMembro";
+
+            $.ajax({
+                type: "GET",
+                url: url_,
+
+                data: {
+                	haMaisDeTantosDiasInt: 1,
+                    haMaisDeTantosDiasExt: 2
+                },
+
+                // The key needs to match your method's input parameter (case-sensitive).
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+
+                success: function (data) {
+                    console.log('Success! ', data);
+
+                    //callback(data);
+                },
+
+                failure: function (errMsg) {
+                    console.log('Failure... ', errMsg);
+                }
+            })
+
+        });//fim btn1
+        
+        
+        
+      //Botão Clonar Tarefa
+        $('#btnRest2').click(function(){
+        	console.log('loadContent btn2');
+            var url_ = "/fies/ns/rest/tarefa/listarResumidosSobResponsabilidade2";
+            
+            $.ajax({
+                type: "POST",
+             	// The key needs to match your method's input parameter (case-sensitive).
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: url_,
+
+                //data: req.presenter,
+                data: formToJSON(),
+
+                success: function (data) {
+                    console.log('Success! ', data);
+
+                    //callback(data);
+                },
+
+                failure: function (errMsg) {
+                    console.log('Failure... ', errMsg);
+                }
+            })
+
+        });//fim btn1
+        
+        $('#btnRest2').click(function(){
+        	console.log('loadContent btn2');
+            var url_ = "/fies/ns/rest/tarefa/listarResumidosSobResponsabilidade2";
+            
+            $.ajax({
+                type: "POST",
+             	// The key needs to match your method's input parameter (case-sensitive).
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: url_,
+
+                //data: req.presenter,
+                data: formToJSON(),
+
+                success: function (data) {
+                    console.log('Success! ', data);
+
+                    //callback(data);
+                },
+
+                failure: function (errMsg) {
+                    console.log('Failure... ', errMsg);
+                }
+            })
+
+        });//fim btn2
+        
+        $('#btnRest3').click(function(){
+        	console.log('loadContent btn3');
+            //var url_ = "/fiesWeb/ns/rest/servicos/sms/enviar";
+            var url_ = "/mecfies/ns/rest/servicos/sms/enviar";
+            
+            $.ajax({
+                type: "POST",
+             	// The key needs to match your method's input parameter (case-sensitive).
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: url_,
+
+                //data: req.presenter,
+                data: formToJSON2(),
+
+                success: function (data) {
+                    console.log('Success! ', data);
+                    //callback(data);
+                },
+
+                failure: function (errMsg) {
+                    console.log('Failure... ', errMsg);
+                }
+            })
+
+        });//fim btn3
+        
+        $('#btnRest4').click(function(){
+        	console.log('loadContent btn3');
+            //var url_ = "/fiesWeb/ns/rest/servicos/aditamento/confirmarreabertura";
+            var url_ = "/mecfies/ns/rest/servicos/aditamento/confirmarreabertura";
+            
+            $.ajax({
+                type: "POST",
+             	// The key needs to match your method's input parameter (case-sensitive).
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: url_,
+
+                //data: req.presenter,
+                data: formToJSON2(),
+
+                success: function (data) {
+                    console.log('Success! ', data);
+                    //callback(data);
+                },
+
+                failure: function (errMsg) {
+                    console.log('Failure... ', errMsg);
+                }
+            })
+
+        });//fim btn4
+        
+        $('#btnRest5').click(function(){
+        	console.log('loadContent btn3');
+            //var url_ = "/fiesWeb/ns/rest/servicos/aditamento/validar";
+            var url_ = "/mecfies/ns/rest/servicos/aditamento/validar";
+            
+            $.ajax({
+                type: "POST",
+             	// The key needs to match your method's input parameter (case-sensitive).
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: url_,
+
+                //data: req.presenter,
+                data: formToJSON3(),
+
+                success: function (data) {
+                    console.log('Success! ', data);
+                    //callback(data);
+                },
+
+                failure: function (errMsg) {
+                    console.log('Failure... ', errMsg);
+                }
+            })
+
+        });//fim btn5
+        
+        
+        $('#btnRest6').click(function(){
+        	console.log('loadContent btn6');
+            //var url_ = "/fiesWeb/ns/rest/servicos/aditamento/validar";
+            var url_ = "/mecfies/ns/rest/servicos/aditamento/historico?nuCpf=51964149754";
+            
+            $.ajax({
+                type: "GET",
+             	// The key needs to match your method's input parameter (case-sensitive).
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: url_,
+
+                //data: req.presenter,
+                //data: formToJSON3(),
+
+                success: function (data) {
+                    console.log('Success = ', data);
+                    //callback(data);
+                },
+
+                failure: function (errMsg) {
+                    console.log('Failure = ', errMsg);
+                }
+            })
+
+        });//fim btn6
+        
+        $('#btnRest7').click(function(){
+        	console.log('loadContent btn7');
+            //var url_ = "/fiesWeb/ns/rest/servicos/aditamento/validar";
+            var url_ = "/mecfies/ns/rest/servicos/aditamento/disponivel";
+            
+            $.ajax({
+                type: "POST",
+             	// The key needs to match your method's input parameter (case-sensitive).
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: url_,
+
+                //data: req.presenter,
+                data: cpfJson(),
+
+                success: function (data) {
+                    console.log('Success = ', data);
+                    //callback(data);
+                },
+
+                failure: function (errMsg) {
+                    console.log('Failure = ', errMsg);
+                }
+            })
+
+        });//fim btn7
+        
+        $('#btnRest8').click(function(){
+        	console.log('loadContent btn8');
+            //var url_ = "/fiesWeb/ns/rest/servicos/aditamento/validar";
+            var url_ = "/mecfies/ns/rest/servicos/seguranca/autenticar";
+            
+            $.ajax({
+                type: "POST",
+             	// The key needs to match your method's input parameter (case-sensitive).
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: url_,
+
+                //data: req.presenter,
+                data: auth(),
+
+                success: function (data) {
+                    console.log('Success = ', data);
+                    //callback(data);
+                },
+
+                failure: function (errMsg) {
+                    console.log('Failure = ', errMsg);
+                }
+            })
+
+        });//fim btn8
+        
+        $('#btnRest9').click(function(){
+        	console.log('loadContent btn9');
+            //var url_ = "/fiesWeb/ns/rest/servicos/aditamento/confirmarreabertura";
+            var url_ = "/mecfies/ns/rest/servicos/aditamento/consultarreabertura";
+            
+            $.ajax({
+                type: "POST",
+             	// The key needs to match your method's input parameter (case-sensitive).
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: url_,
+
+                //data: req.presenter,
+                data: formToJSON4(),
+
+                success: function (data) {
+                    console.log('Success! ', data);
+                    //callback(data);
+                },
+
+                failure: function (errMsg) {
+                    console.log('Failure... ', errMsg);
+                }
+            })
+
+        });//fim btn9
+        
+        $('#btnRest10').click(function(){
+        	console.log('loadContent btn10');
+        	var url_ = "/mecfies/ns/rest/servicos/getMaxixe";
+            
+            $.ajax({
+                type: "GET",
+             	// The key needs to match your method's input parameter (case-sensitive).
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: url_,
+
+                success: function (data) {
+                    console.log('Success = ', data);
+                },
+
+                failure: function (errMsg) {
+                    console.log('Failure = ', errMsg);
+                }
+            })
+
+        });//fim btn10
+        
+        $('#btnRest11').click(function(){
+        	console.log('loadContent btn11');
+            var url_ = "/mecfies/ns/rest/servicos/fndeobras/getescolaporcoordenadas";
+            console.log('COORDENADAS escola = ', getCoordenadas());
+            
+            $.ajax({
+                type: "POST",
+             	// The key needs to match your method's input parameter (case-sensitive).
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: url_,
+
+                //data: req.presenter,
+                data: getCoordenadas(),//getCoordenadasEscola(),
+
+                success: function (data) {
+                    console.log('Success! ', data);
+                    //callback(data);
+                },
+
+                failure: function (errMsg) {
+                    console.log('Failure... ', errMsg);
+                }
+            })
+
+        });//fim btn11
+        
+        
+        $('#btnRest12').click(function(){
+        	console.log('loadContent btn11');
+            var url_ = "/mecfies/ns/rest/servicos/fndeobras/getdadosobraescolaporcoordenadas";
+            console.log('COORDENADAS OBRA = ', getCoordenadas());
+            
+            $.ajax({
+                type: "POST",
+             	// The key needs to match your method's input parameter (case-sensitive).
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: url_,
+
+                //data: req.presenter,
+                data: getCoordenadas(),//getCoordenadasObraEscola(),
+
+                success: function (data) {
+                    console.log('Success! ', data);
+                    //callback(data);
+                },
+
+                failure: function (errMsg) {
+                    console.log('Failure... ', errMsg);
+                }
+            })
+
+        });//fim btn12
+        
+        
+        $('#btnRest12').click(function(){
+        	console.log('loadContent btn11');
+            var url_ = "/mecfies/ns/rest/servicos/fndeobras/getdadosobraescolaporcoordenadas";
+            console.log('COORDENADAS OBRA = ', getCoordenadas());
+            
+            
+            
+            $.ajax({
+                type: "POST",
+             	// The key needs to match your method's input parameter (case-sensitive).
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                url: url_,
+
+                //data: req.presenter,
+                data: getCoordenadas(),//getCoordenadasObraEscola(),
+
+                success: function (data) {
+                    console.log('Success! ', data);
+                    //callback(data);
+                },
+
+                failure: function (errMsg) {
+                    console.log('Failure... ', errMsg);
+                }
+            })
+
+        });//fim btn12
+        
+        
+        
+        $('#btnPesquisar').click(function(){
+        	console.log('loadContent btnPesquisar');
+            var url_ = null;
+            console.log('pesquisar COORDENADAS OBRA = ', getCoordenadas());
+            
+            /*  var obra = $('#chkObra').val()*/
+            
+            var retorno = $('#retorno');
+            
+            if($("#chkObra").is(':checked')) {
+            	url_ = "/mecfies/ns/rest/servicos/fndeobras/getdadosobraescolaporcoordenadas";
+            	console.log('PESQUISA POR DADOS OBRA = ', url_);
+            	
+            	$.ajax({
+                    type: "POST",
+                 	// The key needs to match your method's input parameter (case-sensitive).
+                    contentType: "application/json; charset=utf-8",
+                    dataType: "json",
+                    url: url_,
+
+                    //data: req.presenter,
+                    data: getCoordenadas(),
+
+                    success: function (data) {
+                        console.log('Success! ', data);
+                        //callback(data);
+                        var jsonPretty = JSON.stringify(data);
+                        retorno.val(jsonPretty);
+                    },
+
+                    failure: function (errMsg) {
+                        console.log('Failure... ', errMsg);
+                    }
+                });
+            } else {
+            	url_ = "/mecfies/ns/rest/servicos/fndeobras/getescolaporcoordenadas";
+            	console.log('PESQUISA POR DADOS ESCOLA = ', url_);
+            	
+            	 $.ajax({
+                     type: "POST",
+                  	// The key needs to match your method's input parameter (case-sensitive).
+                     contentType: "application/json; charset=utf-8",
+                     dataType: "json",
+                     url: url_,
+
+                     //data: req.presenter,
+                     data: getCoordenadas(),//getCoordenadasObraEscola(),
+
+                     success: function (data) {
+                         console.log('Success! ', data);
+                         //callback(data);
+                         var jsonPretty = JSON.stringify(JSON.parse(data),null,2);
+                         retorno.val(jsonPretty);
+                     },
+
+                     failure: function (errMsg) {
+                         console.log('Failure... ', errMsg);
+                     }
+                 })
+            }
+
+        });//fim btnPesquisar
+        
+        function getCoordenadas() {
+            return JSON.stringify({
+            		'latitude': $('#latitude').val(),
+            		'longitude': $('#longitude').val(),
+                });
+        }
+        
+        function formToJSON() {
+            return JSON.stringify({
+            	"codigo":"1",
+				"nome":"teste 1",
+				"duracao":"3",
+				"dataInicio":"10/04/2012",
+				"dataEntrega":"12/04/2012",
+				"dataTermino":"14/04/2012",
+				"idWinTarefa":"w_100"
+                });
+        }
+        
+        function formToJSON2() {
+            return JSON.stringify({
+            	'nuCpf': '519.641.497-54',
+                'nuRic': '9838390202020298289202928288282828',
+                'dsEmail': 'ats.xvy@mail.com',
+                'coOcupacao': 1,
+                'nuCep':'12.345-678',
+                'dsEndereco': 'Avenida Flamengo, Rua Buarque de Macedo numero',
+                'dsComplemento': 'outro complemento',
+                'nuEndereco': 60,
+                'nuTelefone': '(21)2772-7820',
+                'nuCelular': '(21)99872-7820'
+                });
+        }
+        
+        function formToJSON3() {
+            return JSON.stringify({
+            	'nuCpf': '519.641.497-54',
+                'coAditamento': '1',
+                'tpValidacao': '1'
+                });
+        }
+        
+        function cpfJson() {
+            return JSON.stringify({
+            	'nuCpf': '51964149754'
+                });
+        }
+        
+        function auth() {
+            return JSON.stringify({
+            	'nuCpf': '51964149754',
+            	'senha': '111'
+                });
+        }
+        
+        function formToJSON4() {
+            return JSON.stringify({
+            	'nuCpf': '519.641.497-54',
+                'nuRic': '9838390202020298289202928288282828',
+                'dsEmail': 'ats.xvy@mail.com',
+                'coAditamento': 1,
+                'coOcupacao': 1,
+                'nuCep':'12.345-678',
+                'dsEndereco': 'Avenida Flamengo, Rua Buarque de Macedo numero',
+                'dsComplemento': 'outro complemento',
+                'nuEndereco': 60,
+                'nuTelefone': '(21)2772-7820',
+                'nuCelular': '(21)99872-7820'
+                });
+        }
+        
+        function getCoordenadasEscola() {
+            return JSON.stringify({
+            		'latitude': '-47.9011',
+            		'longitude': '-15.8149'
+                });
+        }
+        
+        function getCoordenadasObraEscola() {
+            return JSON.stringify({
+            		'latitude': '-47.8858',
+            		'longitude': '-15.8487'
+                });
+        }
+        
+        
+        
+	});
+// ]]>	
+</script>
+	</head>
+
+	<body>  
+		<div id="principal" align="center">
+			
+
+            <!--<div id="cadastro" class="redim ui-widget-content ui-corner-all">-->
+            <div id="cadastro">
+                
+                    <h3><a href="#">Cadastro</a></h3>
+                    <div>
+                        <p>
+                            
+                                    <h2>Pesquisa Dados Obra/Escola</h2>
+                                    <p><label>Latitude: <input type="text" id="latitude" name="latitude"" size="20" value=""> ex.: -47.8858</label></p>
+                                    <p><label>Longitude: <input type="text" id="longitude" name="longitude" size="20" value="">ex.: -15.8487</label></p>
+                                    <p><label><input type="checkbox" id="chkObra" name="chkObra"" value="1"> OBRA<br></label></p>
+                            
+                                	<p><input type="button" id="btnPesquisar" value="Pesquisar" /></p><br/><br/>
+                                	<p id="mensagem" align="center"> 
+                                		&nbsp;<textarea id="retorno" rows="20" cols="80"></textarea>
+                                	</p>
+                        </p>
+                    </div>
+
+                   
+
+                    <!-- <h3><a href="#">Outras</a></h3>
+                    <div>
+                        <p>
+                            <ul>
+                            	
+                                <li><button type="button" id="btnRest8"> Autenticar</button></li>
+                                <li><button type="button" id="btnRest3">Enviar SMS POST</button></li>
+                                <li><button type="button" id="btnRest4">Confirmar Reabertura POST</button></li>
+                                <li><button type="button" id="btnRest5">Validar Aditamento POST</button></li>
+                                <li><button type="button" id="btnRest6"> Recuperar Historico GET</button></li>
+                                <li><button type="button" id="btnRest7"> Aditamento DISPONIVEL POST</button></li>
+                                <li><button type="button" id="btnRest9">Consultar Reabertura POST</button></li>
+                                <li><button type="button" id="btnRest10">Chamada Maxixe</button></li>
+                                <li><button type="button" id="btnRest11">Consultar Coordenadas da Escola</button></li>
+                                <li><button type="button" id="btnRest12">Consultar Coordenadas da Obra</button></li>
+                                
+
+                            </ul>
+                        </p>
+                    </div> -->
+
+                
+            </div> <!-- fim redimensionável -->
+
+            
+
+		</div>
+	</body>
+</html>
